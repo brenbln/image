@@ -1,3 +1,27 @@
 page-home {
 
+    ion-content {
+        background-color: #000000;
+    }
+
+    ion-title {
+        
+    }
+
+    .container {
+        position:relative;
+        float: left;
+        // margin-left:10px;
+    }
+
+    .category-header {
+        padding-bottom: 20px;
+    }
+
+    .checkbox {
+        position: absolute;
+        left: 10%;
+        top: 8%;
+        z-index: 2;
+    }
 }

@@ -1,14 +1,56 @@
 <ion-header>
-  <ion-navbar>
-    <ion-title>
-      Ionic Blank
-    </ion-title>
+  <ion-navbar hideBackButton>
+    <ion-buttons left>
+      <button *ngIf="multiSelectEnabled" ion-button (click)="prev()">
+        <ion-icon class="back" name="arrow-back"></ion-icon>
+      </button>
+    </ion-buttons>
+    <ion-title *ngIf="!multiSelectEnabled">Documents</ion-title>
+    <ion-title *ngIf="multiSelectEnabled">Move documents</ion-title>
+    <ion-buttons end>
+        <button ion-button icon-only color="dark" (click)="presentPopover($event)">
+          <ion-icon name="more"></ion-icon>
+        </button>
+    </ion-buttons>
   </ion-navbar>
 </ion-header>
 
 <ion-content padding>
-  The world is your oyster.
-  <p>
-    If you get lost, the <a href="http://ionicframework.com/docs/v2">docs</a> will be your guide.
-  </p>
+  <ion-grid>
+      <ion-row class="category-header">Alpha Type Buttons</ion-row>
+      <ion-row >
+          <div class="container" *ngFor="let button of buttons">
+            <!-- <button ion-button  *ngIf=" button.type == 'Alpha' " (click)="onButtonPress($event, button)">{{button.name}}</button> -->
+            <!-- <button *ngIf=" button.type == 'Alpha' " (click)="onButtonPress($event, button)">
+              <ion-img style="width: 120px; height: 120px;" src="assets/imgs/logo.png"></ion-img>
+            </button> -->
+            <!-- <img style="width: 120px; height: 120px;" src={{button.img}} *ngIf=" button.type == 'Alpha' " (click)="onButtonPress($event, button)"> -->
+            <ion-checkbox class="checkbox" *ngIf=" button.type == 'Alpha' && multiSelectEnabled" ></ion-checkbox>
+            <img ion-long-press [interval]="500" 
+            style="width: 144px; height: 144px; padding-left: 5%" 
+            src={{button.img}} 
+            *ngIf=" button.type == 'Alpha' " 
+            (onPressStart)="onPress($event, button)"
+            (onPressing)="onLongPress($event, button)"
+            (onPressEnd)="onPressRelease($event, button)">
+            <!-- <button ion-button ion-long-press [interval]="500" *ngIf=" button.type == 'Alpha' " (onPressing)="onButtonPress($event, button)">{{button.name}}</button> -->
+          </div>
+      </ion-row>
+      <ion-row class="category-header">Beta Type Buttons</ion-row>
+      <ion-row>
+          <div class="container" *ngFor="let button of buttons">
+            <!-- <button ion-button  *ngIf=" button.type == 'Beta' " (click)="onButtonPress($event, button)">{{button.name}}</button> -->
+            <!-- <button ion-button ion-long-press [interval]="500" *ngIf=" button.type == 'Beta' " (onPressing)="onButtonPress($event, button)">{{button.name}}</button> -->
+            <!-- <img style="width: 120px; height: 120px;" src={{button.img}} *ngIf=" button.type == 'Beta' " (click)="onButtonPress($event, button)"> -->
+            <ion-checkbox class="checkbox" *ngIf=" button.type == 'Beta' && multiSelectEnabled"></ion-checkbox>
+            <img ion-long-press [interval]="500" 
+            style="width: 144px; height: 144px; padding-left: 5%" 
+            src={{button.img}} 
+            *ngIf=" button.type == 'Beta' " 
+            (onPressStart)="onPress($event, button)"
+            (onPressing)="onLongPress($event, button)"
+            (onPressEnd)="onPressRelease($event, button)">
+          </div>
+      </ion-row>
+  </ion-grid>
 </ion-content>
