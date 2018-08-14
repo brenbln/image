@@ -25,9 +25,9 @@
               <ion-img style="width: 120px; height: 120px;" src="assets/imgs/logo.png"></ion-img>
             </button> -->
             <!-- <img style="width: 120px; height: 120px;" src={{button.img}} *ngIf=" button.type == 'Alpha' " (click)="onButtonPress($event, button)"> -->
-            <ion-checkbox class="checkbox" *ngIf=" button.type == 'Alpha' && multiSelectEnabled" ></ion-checkbox>
+            <ion-checkbox class="checkbox" *ngIf=" button.type == 'Alpha' && multiSelectEnabled" (ionChange)="updateList(button)"></ion-checkbox>
             <img ion-long-press [interval]="500" 
-            style="width: 144px; height: 144px; padding-left: 5%" 
+            style="width: 64px; height:64px; padding-left: 5%" 
             src={{button.img}} 
             *ngIf=" button.type == 'Alpha' " 
             (onPressStart)="onPress($event, button)"
@@ -42,9 +42,9 @@
             <!-- <button ion-button  *ngIf=" button.type == 'Beta' " (click)="onButtonPress($event, button)">{{button.name}}</button> -->
             <!-- <button ion-button ion-long-press [interval]="500" *ngIf=" button.type == 'Beta' " (onPressing)="onButtonPress($event, button)">{{button.name}}</button> -->
             <!-- <img style="width: 120px; height: 120px;" src={{button.img}} *ngIf=" button.type == 'Beta' " (click)="onButtonPress($event, button)"> -->
-            <ion-checkbox class="checkbox" *ngIf=" button.type == 'Beta' && multiSelectEnabled"></ion-checkbox>
+            <ion-checkbox class="checkbox" *ngIf=" button.type == 'Beta' && multiSelectEnabled " (ionChange)="updateList(button)"></ion-checkbox>
             <img ion-long-press [interval]="500" 
-            style="width: 144px; height: 144px; padding-left: 5%" 
+            style="width: 64px; height: 64px; padding-left: 5%" 
             src={{button.img}} 
             *ngIf=" button.type == 'Beta' " 
             (onPressStart)="onPress($event, button)"
@@ -52,5 +52,14 @@
             (onPressEnd)="onPressRelease($event, button)">
           </div>
       </ion-row>
+
+      <button 
+    ion-button *ngIf="multiSelectEnabled"
+    style="position: absolute; bottom:10px; width: 144px; margin-left: 33%"
+    (click)="onMovePress($event)">
+    Move</button>
   </ion-grid>
+
+    
+  
 </ion-content>
