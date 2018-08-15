@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { NavController, ViewController } from 'ionic-angular';
+import { NavController, ViewController, NavParams, Alert } from 'ionic-angular';
 import { AlertController, PopoverController, ModalController } from 'ionic-angular';
 
 @Component({
@@ -8,20 +8,20 @@ import { AlertController, PopoverController, ModalController } from 'ionic-angul
 })
 export class HomePage {
 
-  buttons = [];
+  images = [];
   testCheckboxOpen = false;
   testCheckboxResult: any;
   multiSelectEnabled: boolean = false;
   alertControlEnabled = false;
 
   constructor(public navCtrl: NavController, private alertCtrl: AlertController, private popoverCtrl: PopoverController, public modalCtrl: ModalController) {
-    this.buttons.push(new Button("Alpha", "A-One"));
-    this.buttons.push(new Button("Alpha", "A-Two"));
-    this.buttons.push(new Button("Alpha", "A-Three"));
+    this.images.push(new Image("Alpha", "A-One"));
+    this.images.push(new Image("Alpha", "A-Two"));
+    this.images.push(new Image("Alpha", "A-Three"));
 
-    this.buttons.push(new Button("Beta", "B-One"));
-    this.buttons.push(new Button("Beta", "B-Two"));
-    this.buttons.push(new Button("Beta", "B-Three"));
+    this.images.push(new Image("Beta", "B-One"));
+    this.images.push(new Image("Beta", "B-Two"));
+    this.images.push(new Image("Beta", "B-Three"));
   }
 
   presentPopover(event: UIEvent) {
@@ -31,128 +31,22 @@ export class HomePage {
     });
   }
 
-  onLongPress(event, button) {
+  onLongPress(event, imageList) {
 
-    this.multiSelectEnabled = true;
-    // if (!this.alertControlEnabled) {
-    //   console.log(button.name + button.type);
-    //   let alert = this.alertCtrl.create();
-    //   this.alertControlEnabled = true;
-    //   alert.setTitle("Change type");
-    //   alert.addInput({
-    //     type: 'radio',
-    //     label: 'Alpha',
-    //     value: 'Alpha',
-    //   });
-
-    //   alert.addInput({
-    //     type: 'radio',
-    //     label: 'Beta',
-    //     value: 'Beta',
-    //   });
-
-    //   alert.addButton({
-    //     text: 'Cancel',
-    //     handler: () => {
-    //       this.alertControlEnabled = false;
-    //     }
-    //   });
-
-    //   alert.addButton({
-    //     text: 'Move',
-    //     handler: (data: any) => {
-    //       console.log('Checkbox data:', data);
-    //       this.testCheckboxOpen = false;
-    //       this.testCheckboxResult = data;
-    //       button.setType(data.toString());
-    //       this.alertControlEnabled = false;
-    //       console.log('Button changed to: ' + button.type.toString());
-    //     }
-    //   });
-
-    //   alert.present();
-    // }
+    let editModal = this.modalCtrl.create(EditPage, imageList);
+    editModal.present();
   }
 
-  updateList(button) {
-
-    if (!button.multiListCheck) {
-      button.multiListCheck = true;
-      console.log("DEBUG|LOG: Checked " + button.name);
-    } else {
-      button.multiListCheck = false;
-      console.log("DEBUG|LOG: Unchecked " + button.name);
-    }
-
-  }
-
-  onPressRelease(event, button) {
+  onPressRelease(event, image) {
     this.alertControlEnabled = false;
   }
 
-  onPress(event, button) {
+  onPress(event, image) {
 
   }
-
-  prev() {
-    // Reset all settings and uncheck all images
-    this.multiSelectEnabled = false;
-    this.resetMultiListCheck();
-  }
-
-  onMovePress(event) {
-    
-      let alert = this.alertCtrl.create();
-      this.alertControlEnabled = true;
-      alert.setTitle("Change type");
-      alert.addInput({
-        type: 'radio',
-        label: 'Alpha',
-        value: 'Alpha',
-      });
-
-      alert.addInput({
-        type: 'radio',
-        label: 'Beta',
-        value: 'Beta',
-      });
-
-      alert.addButton({
-        text: 'Cancel',
-        handler: () => {
-          this.alertControlEnabled = false;
-        }
-      });
-
-      alert.addButton({
-        text: 'Move',
-        handler: (data: any) => {
-          console.log('Checkbox data:', data);
-          this.testCheckboxOpen = false;
-          this.testCheckboxResult = data;
-          this.buttons.forEach(element => {
-            if (element.multiListCheck) {
-              element.setType(data.toString());
-            }
-          });
-          this.alertControlEnabled = false;
-          this.resetMultiListCheck();
-        }
-      });
-
-      alert.present();
-    }
-  
-    // Helper functions
-    resetMultiListCheck() {
-      this.buttons.forEach(element => {
-        element.multiListCheck = false;
-      });
-    }
-
 }
 
-class Button {
+class Image {
   img: string;
   multiListCheck: boolean = false;
   constructor(public type: string, public name: string) {
@@ -166,6 +60,14 @@ class Button {
   }
 }
 
+/***************************** 
+  MODAL PAGE CLASSES BELOW
+ *****************************/
+
+ /*
+  * PopoverPage
+  * Handles the vertical three-dot vertical drop down on the root Documents page
+  */
 @Component({
   template: `<ion-list>
               <ion-list-header>Ionic</ion-list-header>
@@ -181,5 +83,102 @@ export class PopoverPage {
 
   close() {
     this.viewCtrl.dismiss();
+  }
+}
+
+ /*
+  * EditPage
+  * Handle the logic for "Edit Mode" of the Documents page
+  */
+@Component ({
+  selector: 'page-home',
+  templateUrl: 'edit.html'
+})
+export class EditPage {
+  ionViewDidLoad() {
+    console.log('ionViewDidLoad EditPage');
+  }
+
+  images = [];
+  testCheckboxOpen = false;
+  testCheckboxResult: any;
+  alertControlEnabled = false;
+
+  constructor(public navCtrl: NavController,  public viewCtrl: ViewController, public params: NavParams, public alertCtrl: AlertController) {
+    
+    console.log("DEBUG|LOG: Loading images: " + this.params.get('imgList'));
+    this.images.forEach(element => {
+      console.log(element.name);
+    });
+    this.images = this.params.get('imgList');
+
+  }
+
+  // prev():
+  // Controls back button functionality. If any images are checked, before dismissing the modal, toggle the image check.
+  prev() {
+    this.resetMultiListCheck();
+    this.viewCtrl.dismiss();
+  }
+  
+  onMovePress(event) {
+    
+    let alert = this.alertCtrl.create();
+    this.alertControlEnabled = true;
+    alert.setTitle("Change type");
+    alert.addInput({
+      type: 'radio',
+      label: 'Alpha',
+      value: 'Alpha',
+    });
+
+    alert.addInput({
+      type: 'radio',
+      label: 'Beta',
+      value: 'Beta',
+    });
+
+    alert.addButton({
+      text: 'Cancel',
+      handler: () => {
+        this.alertControlEnabled = false;
+      }
+    });
+
+    alert.addButton({
+      text: 'Move',
+      handler: (data: any) => {
+        console.log('Checkbox data:', data);
+        this.testCheckboxOpen = false;
+        this.testCheckboxResult = data;
+        this.images.forEach(element => {
+          if (element.multiListCheck) {
+            element.setType(data.toString());
+          }
+        });
+        this.alertControlEnabled = false;
+        this.resetMultiListCheck();
+      }
+    });
+
+    alert.present();
+  }
+
+  updateList(image) {
+
+    if (!image.multiListCheck) {
+      image.multiListCheck = true;
+      console.log("DEBUG|LOG: Checked " + image.name);
+    } else {
+      image.multiListCheck = false;
+      console.log("DEBUG|LOG: Unchecked " + image.name);
+    }
+
+  }
+  // Helper functions
+  resetMultiListCheck() {
+    this.images.forEach(element => {
+      element.multiListCheck = false;
+    });
   }
 }

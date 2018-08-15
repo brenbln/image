@@ -1,17 +1,11 @@
 <ion-header>
-  <ion-navbar hideBackButton>
+  <ion-navbar>
     <ion-buttons left>
-      <button *ngIf="multiSelectEnabled" ion-button (click)="prev()">
+      <button ion-button (click)="prev()">
         <ion-icon class="back" name="arrow-back"></ion-icon>
       </button>
     </ion-buttons>
-    <ion-title *ngIf="!multiSelectEnabled">Documents</ion-title>
-    <ion-title *ngIf="multiSelectEnabled">Move documents</ion-title>
-    <ion-buttons end>
-        <button ion-button icon-only color="dark" (click)="presentPopover($event)">
-          <ion-icon name="more"></ion-icon>
-        </button>
-    </ion-buttons>
+    <ion-title>Move documents</ion-title>
   </ion-navbar>
 </ion-header>
 
@@ -25,14 +19,11 @@
               <ion-img style="width: 120px; height: 120px;" src="assets/imgs/logo.png"></ion-img>
             </button> -->
             <!-- <img style="width: 120px; height: 120px;" src={{button.img}} *ngIf=" button.type == 'Alpha' " (click)="onButtonPress($event, button)"> -->
-            <ion-checkbox class="checkbox" *ngIf=" image.type == 'Alpha' && multiSelectEnabled" (ionChange)="updateList(image)"></ion-checkbox>
+            <ion-checkbox class="checkbox" *ngIf=" image.type == 'Alpha'" (ionChange)="updateList(image)"></ion-checkbox>
             <img ion-long-press [interval]="500" 
             style="width: 64px; height:64px; padding-left: 5%" 
             src={{image.img}} 
-            *ngIf=" image.type == 'Alpha' " 
-            (onPressStart)="onPress($event, image)"
-            (onPressing)="onLongPress($event, {imgList: images})"
-            (onPressEnd)="onPressRelease($event, image)">
+            *ngIf=" image.type == 'Alpha' " >
             <!-- <button ion-button ion-long-press [interval]="500" *ngIf=" button.type == 'Alpha' " (onPressing)="onButtonPress($event, button)">{{button.name}}</button> -->
           </div>
       </ion-row>
@@ -42,19 +33,16 @@
             <!-- <button ion-button  *ngIf=" button.type == 'Beta' " (click)="onButtonPress($event, button)">{{button.name}}</button> -->
             <!-- <button ion-button ion-long-press [interval]="500" *ngIf=" button.type == 'Beta' " (onPressing)="onButtonPress($event, button)">{{button.name}}</button> -->
             <!-- <img style="width: 120px; height: 120px;" src={{button.img}} *ngIf=" button.type == 'Beta' " (click)="onButtonPress($event, button)"> -->
-            <ion-checkbox class="checkbox" *ngIf=" image.type == 'Beta' && multiSelectEnabled " (ionChange)="updateList(image)"></ion-checkbox>
+            <ion-checkbox class="checkbox" *ngIf=" image.type == 'Beta'" (ionChange)="updateList(image)"></ion-checkbox>
             <img ion-long-press [interval]="500" 
             style="width: 64px; height: 64px; padding-left: 5%" 
             src={{image.img}} 
-            *ngIf=" image.type == 'Beta' " 
-            (onPressStart)="onPress($event, image)"
-            (onPressing)="onLongPress($event, {imgList: images})"
-            (onPressEnd)="onPressRelease($event, image)">
+            *ngIf=" image.type == 'Beta' " >
           </div>
       </ion-row>
 
       <button 
-    ion-button *ngIf="multiSelectEnabled"
+    ion-button 
     style="position: absolute; bottom:10px; width: 144px; margin-left: 33%"
     (click)="onMovePress($event)">
     Move</button>
