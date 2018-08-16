@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { NavController, ViewController, NavParams, Alert } from 'ionic-angular';
+import { NavController, ViewController, NavParams, Alert, Platform } from 'ionic-angular';
 import { AlertController, PopoverController, ModalController } from 'ionic-angular';
 
 @Component({
@@ -67,10 +67,10 @@ class Image {
   MODAL PAGE CLASSES BELOW
  *****************************/
 
- /*
-  * PopoverPage
-  * Handles the vertical three-dot vertical drop down on the root Documents page
-  */
+/*
+ * PopoverPage
+ * Handles the vertical three-dot vertical drop down on the root Documents page
+ */
 @Component({
   template: `<ion-list>
               <ion-list-header>Ionic</ion-list-header>
@@ -89,11 +89,11 @@ export class PopoverPage {
   }
 }
 
- /*
-  * EditPage
-  * Handle the logic for "Edit Mode" of the Documents page
-  */
-@Component ({
+/*
+ * EditPage
+ * Handle the logic for "Edit Mode" of the Documents page
+ */
+@Component({
   selector: 'page-home',
   templateUrl: 'edit.html'
 })
@@ -105,15 +105,29 @@ export class EditPage {
   images = [];
   testCheckboxOpen = false;
   testCheckboxResult: any;
-  alertControlEnabled = false;
+  alertControlEnabled: boolean = false;
+  editModeEnabled: boolean = false;
 
-  constructor(public navCtrl: NavController,  public viewCtrl: ViewController, public params: NavParams, public alertCtrl: AlertController) {
-    
+  constructor(public navCtrl: NavController, public viewCtrl: ViewController, public params: NavParams, public alertCtrl: AlertController, public plt: Platform) {
+
     console.log("DEBUG|LOG: Loading images: " + this.params.get('imgList'));
     this.images.forEach(element => {
       console.log(element.name);
     });
     this.images = this.params.get('imgList');
+
+    // this.plt.ready().then(() => {
+
+    //   this.plt.registerBackButtonAction(() => {
+    //     console.log("Back button pressed");
+    //   });
+    // });
+    
+   let deregister = this.plt.registerBackButtonAction(() => {
+      console.log("Back button pressed");
+      this.viewCtrl.dismiss();
+      deregister();
+    }, 1);
 
   }
 
@@ -123,9 +137,9 @@ export class EditPage {
     this.resetMultiListCheck();
     this.viewCtrl.dismiss();
   }
-  
+
   onMovePress(event) {
-    
+
     let alert = this.alertCtrl.create();
     this.alertControlEnabled = true;
     alert.setTitle("Change type");
