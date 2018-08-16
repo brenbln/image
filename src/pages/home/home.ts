@@ -12,9 +12,13 @@ export class HomePage {
   testCheckboxOpen = false;
   testCheckboxResult: any;
   editModeEnabled: boolean = false;
-  alertControlEnabled = false;
+  uploadModeEnabled: boolean = false;
+  uploadAllowed: boolean = true;
+  alertControlEnabled: boolean = false;
 
-  constructor(public navCtrl: NavController, private alertCtrl: AlertController, private popoverCtrl: PopoverController, public modalCtrl: ModalController) {
+  deregister = null;
+
+  constructor(public navCtrl: NavController, private alertCtrl: AlertController, private popoverCtrl: PopoverController, public modalCtrl: ModalController, public plt: Platform) {
     this.images.push(new Image("Alpha", "A-One"));
     this.images.push(new Image("Alpha", "A-Two"));
     this.images.push(new Image("Alpha", "A-Three"));
@@ -22,6 +26,9 @@ export class HomePage {
     this.images.push(new Image("Beta", "B-One"));
     this.images.push(new Image("Beta", "B-Two"));
     this.images.push(new Image("Beta", "B-Three"));
+
+    this.uploadCheck();
+    
   }
 
   presentPopover(event: UIEvent) {
@@ -32,8 +39,10 @@ export class HomePage {
   }
 
   prev() {
-    this.resetMultiListCheck();
-    this.editModeEnabled = false;
+      this.deregister();
+      this.resetMultiListCheck();
+      this.editModeEnabled = false;
+      this.uploadModeEnabled = false;
   }
 
   resetMultiListCheck() {
@@ -53,6 +62,15 @@ export class HomePage {
     }
   }
 
+  uploadCheck() {
+    if (this.images.length > 0) {
+      this.uploadAllowed = true;
+    } else {
+      this.uploadAllowed = false;
+    }
+  }
+  
+
   /***********************
       EVENT HANDLERS 
    ***********************/
@@ -60,6 +78,10 @@ export class HomePage {
   onLongPress(event, imageList) {
     console.log("Enabling edit mode");
     this.editModeEnabled = true;
+    this.deregister = this.plt.registerBackButtonAction(() => {
+      console.log("Back button pressed");
+      this.prev();
+    }, 0);
   }
 
   onPressRelease(event, image) {
@@ -67,7 +89,7 @@ export class HomePage {
   }
 
   onPress(event, image) {
-    this.editModeEnabled = true;
+    
   }
 
   onImagePress(image) {
@@ -116,6 +138,15 @@ export class HomePage {
     alert.present();
   }
 
+  onUploadPress(event) {
+    console.log("Enabling upload mode");
+    this.uploadModeEnabled = true;
+    this.deregister = this.plt.registerBackButtonAction(() => {
+      console.log("Back button pressed");
+      this.prev();
+    }, 0);
+  }
+
 }
 
 class Image {
@@ -131,10 +162,6 @@ class Image {
     this.type = type;
   }
 }
-
-/***************************** 
-  MODAL PAGE CLASSES BELOW
- *****************************/
 
 /*
  * PopoverPage
@@ -155,120 +182,5 @@ export class PopoverPage {
 
   close() {
     this.viewCtrl.dismiss();
-  }
-}
-
-/*
- * EditPage
- * Handle the logic for "Edit Mode" of the Documents page
- */
-@Component({
-  selector: 'page-home',
-  templateUrl: 'edit.html'
-})
-export class EditPage {
-  ionViewDidLoad() {
-    console.log('ionViewDidLoad EditPage');
-  }
-
-  images = [];
-  testCheckboxOpen = false;
-  testCheckboxResult: any;
-  alertControlEnabled: boolean = false;
-  editModeEnabled: boolean = false;
-
-  constructor(public navCtrl: NavController, public viewCtrl: ViewController, public params: NavParams, public alertCtrl: AlertController, public plt: Platform) {
-
-    console.log("DEBUG|LOG: Loading images: " + this.params.get('imgList'));
-    this.images.forEach(element => {
-      console.log(element.name);
-    });
-    this.images = this.params.get('imgList');
-
-    // this.plt.ready().then(() => {
-
-    //   this.plt.registerBackButtonAction(() => {
-    //     console.log("Back button pressed");
-    //   });
-    // });
-    
-   let deregister = this.plt.registerBackButtonAction(() => {
-      console.log("Back button pressed");
-      this.viewCtrl.dismiss();
-      deregister();
-    }, 1);
-
-  }
-
-  // prev():
-  // Controls back button functionality. If any images are checked, before dismissing the modal, toggle the image check.
-  prev() {
-    this.resetMultiListCheck();
-    this.viewCtrl.dismiss();
-  }
-
-  onMovePress(event) {
-
-    let alert = this.alertCtrl.create();
-    this.alertControlEnabled = true;
-    alert.setTitle("Change type");
-    alert.addInput({
-      type: 'radio',
-      label: 'Alpha',
-      value: 'Alpha',
-    });
-
-    alert.addInput({
-      type: 'radio',
-      label: 'Beta',
-      value: 'Beta',
-    });
-
-    alert.addButton({
-      text: 'Cancel',
-      handler: () => {
-        this.alertControlEnabled = false;
-      }
-    });
-
-    alert.addButton({
-      text: 'Move',
-      handler: (data: any) => {
-        console.log('Checkbox data:', data);
-        this.testCheckboxOpen = false;
-        this.testCheckboxResult = data;
-        this.images.forEach(element => {
-          if (element.multiListCheck) {
-            element.setType(data.toString());
-          }
-        });
-        this.alertControlEnabled = false;
-        this.resetMultiListCheck();
-      }
-    });
-
-    alert.present();
-  }
-
-  updateList(image) {
-
-    if (!image.multiListCheck) {
-      image.multiListCheck = true;
-      console.log("DEBUG|LOG: Checked " + image.name);
-    } else {
-      image.multiListCheck = false;
-      console.log("DEBUG|LOG: Unchecked " + image.name);
-    }
-  }
-
-  onImagePress(image) {
-    console.log("DEBUG|LOG: " + image.name + " checked: " + image.multiListCheck);
-  }
-
-  // Helper functions
-  resetMultiListCheck() {
-    this.images.forEach(element => {
-      element.multiListCheck = false;
-    });
   }
 }

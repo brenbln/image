@@ -8,14 +8,12 @@ import { MyApp } from './app.component';
 import { HomePage } from '../pages/home/home';
 import { LongPressModule } from 'ionic-long-press';
 import { PopoverPage } from '../pages/home/home';
-import { EditPage } from '../pages/home/home';
 
 @NgModule({
   declarations: [
     MyApp,
     HomePage,
-    PopoverPage,
-    EditPage
+    PopoverPage
     ],
   imports: [
     BrowserModule,
@@ -26,9 +24,8 @@ import { EditPage } from '../pages/home/home';
   entryComponents: [
     MyApp,
     HomePage,
-    PopoverPage,
-    EditPage
-  ],
+    PopoverPage
+    ],
   providers: [
     StatusBar,
     SplashScreen,
