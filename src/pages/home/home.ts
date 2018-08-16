@@ -103,7 +103,6 @@ export class EditPage {
   testCheckboxOpen = false;
   testCheckboxResult: any;
   alertControlEnabled = false;
-  checked: boolean = false;
 
   constructor(public navCtrl: NavController,  public viewCtrl: ViewController, public params: NavParams, public alertCtrl: AlertController) {
     
@@ -176,8 +175,8 @@ export class EditPage {
     }
   }
 
-  onImagePress(event) {
-
+  onImagePress(image) {
+    console.log("DEBUG|LOG: " + image.name + " checked: " + image.multiListCheck);
   }
 
   // Helper functions

@@ -13,18 +13,33 @@
   <ion-grid>
     <ion-row class="category-header">Alpha Type Images</ion-row>
     <ion-row>
-        <div class="container" *ngFor="let image of images">
-          <ion-checkbox class="checkbox" *ngIf=" image.type == 'Alpha'" id={{image.name}} (ionChange)="updateList(image)"></ion-checkbox>
+      <!-- <div class="container" *ngFor="let image of images">
+          <ion-checkbox class="checkbox" *ngIf=" image.type == 'Alpha'" checked="image.multiListCheck" (ionChange)="updateList(image)"></ion-checkbox>
           <button block>
+            <img style="width: 64px; height:64px; padding-left: 5%" src={{image.img}} *ngIf=" image.type == 'Alpha' " (ionChange)="updateList(image)" >
+          </button>
+        </div> -->
+
+      <div *ngFor="let image of images">
+        <div class="container" *ngIf="image.type == 'Alpha'">
+          <ion-checkbox class="checkbox" *ngIf=" image.type == 'Alpha'" [checked]="image.multiListCheck"></ion-checkbox>
+          <button block (click)="updateList(image)">
             <img style="width: 64px; height:64px; padding-left: 5%" src={{image.img}} *ngIf=" image.type == 'Alpha' ">
           </button>
         </div>
+      </div>
+
     </ion-row>
     <ion-row class="category-header">Beta Type Images</ion-row>
+
     <ion-row>
-      <div class="container" *ngFor="let image of images">
-        <ion-checkbox class="checkbox" *ngIf=" image.type == 'Beta'" (ionChange)="updateList(image)"></ion-checkbox>
-        <img style="width: 64px; height: 64px; padding-left: 5%" src={{image.img}} *ngIf=" image.type == 'Beta' ">
+      <div *ngFor="let image of images">
+        <div class="container" *ngIf="image.type == 'Beta'">
+          <ion-checkbox class="checkbox" *ngIf=" image.type == 'Beta'" [checked]="image.multiListCheck"></ion-checkbox>
+          <button block (click)="updateList(image)">
+            <img style="width: 64px; height: 64px; padding-left: 5%" src={{image.img}} *ngIf=" image.type == 'Beta' ">
+          </button>
+        </div>
       </div>
     </ion-row>
 
