@@ -11,8 +11,8 @@ export class HomePage {
   images = [];
   testCheckboxOpen = false;
   testCheckboxResult: any;
-  multiSelectEnabled: boolean = false;
-  modalControlEnabled = false;
+  editModeEnabled: boolean = false;
+  alertControlEnabled = false;
 
   constructor(public navCtrl: NavController, private alertCtrl: AlertController, private popoverCtrl: PopoverController, public modalCtrl: ModalController) {
     this.images.push(new Image("Alpha", "A-One"));
@@ -31,22 +31,91 @@ export class HomePage {
     });
   }
 
-  onLongPress(event, imageList) {
+  prev() {
+    this.resetMultiListCheck();
+    this.editModeEnabled = false;
+  }
 
-    if (this.modalControlEnabled) {
-      this.modalControlEnabled = false;
-      let editModal = this.modalCtrl.create(EditPage, imageList);
-      editModal.present();
+  resetMultiListCheck() {
+    this.images.forEach(element => {
+      element.multiListCheck = false;
+    });
+  }
+
+  updateList(image) {
+
+    if (!image.multiListCheck) {
+      image.multiListCheck = true;
+      console.log("DEBUG|LOG: Checked " + image.name);
+    } else {
+      image.multiListCheck = false;
+      console.log("DEBUG|LOG: Unchecked " + image.name);
     }
   }
 
+  /***********************
+      EVENT HANDLERS 
+   ***********************/
+
+  onLongPress(event, imageList) {
+    console.log("Enabling edit mode");
+    this.editModeEnabled = true;
+  }
+
   onPressRelease(event, image) {
-    this.modalControlEnabled = false;
+    null;
   }
 
   onPress(event, image) {
-    this.modalControlEnabled = true;
+    this.editModeEnabled = true;
   }
+
+  onImagePress(image) {
+    console.log("DEBUG|LOG: " + image.name + " checked: " + image.multiListCheck);
+  }
+
+  onMovePress(event) {
+
+    let alert = this.alertCtrl.create();
+    alert.setTitle("Change type");
+    alert.addInput({
+      type: 'radio',
+      label: 'Alpha',
+      value: 'Alpha',
+    });
+
+    alert.addInput({
+      type: 'radio',
+      label: 'Beta',
+      value: 'Beta',
+    });
+
+    alert.addButton({
+      text: 'Cancel',
+      handler: () => {
+        this.alertControlEnabled = false;
+      }
+    });
+
+    alert.addButton({
+      text: 'Move',
+      handler: (data: any) => {
+        console.log('Checkbox data:', data);
+        this.testCheckboxOpen = false;
+        this.testCheckboxResult = data;
+        this.images.forEach(element => {
+          if (element.multiListCheck) {
+            element.setType(data.toString());
+          }
+        });
+        this.editModeEnabled = false;
+        this.resetMultiListCheck();
+      }
+    });
+
+    alert.present();
+  }
+
 }
 
 class Image {

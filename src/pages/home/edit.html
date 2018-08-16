@@ -13,13 +13,6 @@
   <ion-grid>
     <ion-row class="category-header">Alpha Type Images</ion-row>
     <ion-row>
-      <!-- <div class="container" *ngFor="let image of images">
-          <ion-checkbox class="checkbox" *ngIf=" image.type == 'Alpha'" checked="image.multiListCheck" (ionChange)="updateList(image)"></ion-checkbox>
-          <button block>
-            <img style="width: 64px; height:64px; padding-left: 5%" src={{image.img}} *ngIf=" image.type == 'Alpha' " (ionChange)="updateList(image)" >
-          </button>
-        </div> -->
-
       <div *ngFor="let image of images">
         <div class="container" *ngIf="image.type == 'Alpha'">
           <ion-checkbox class="checkbox" *ngIf=" image.type == 'Alpha'" [checked]="image.multiListCheck"></ion-checkbox>
