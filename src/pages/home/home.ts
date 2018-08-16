@@ -103,6 +103,7 @@ export class EditPage {
   testCheckboxOpen = false;
   testCheckboxResult: any;
   alertControlEnabled = false;
+  checked: boolean = false;
 
   constructor(public navCtrl: NavController,  public viewCtrl: ViewController, public params: NavParams, public alertCtrl: AlertController) {
     
@@ -173,8 +174,12 @@ export class EditPage {
       image.multiListCheck = false;
       console.log("DEBUG|LOG: Unchecked " + image.name);
     }
+  }
+
+  onImagePress(event) {
 
   }
+
   // Helper functions
   resetMultiListCheck() {
     this.images.forEach(element => {
