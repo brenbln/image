@@ -12,7 +12,7 @@ export class HomePage {
   testCheckboxOpen = false;
   testCheckboxResult: any;
   multiSelectEnabled: boolean = false;
-  alertControlEnabled = false;
+  modalControlEnabled = false;
 
   constructor(public navCtrl: NavController, private alertCtrl: AlertController, private popoverCtrl: PopoverController, public modalCtrl: ModalController) {
     this.images.push(new Image("Alpha", "A-One"));
@@ -33,16 +33,19 @@ export class HomePage {
 
   onLongPress(event, imageList) {
 
-    let editModal = this.modalCtrl.create(EditPage, imageList);
-    editModal.present();
+    if (this.modalControlEnabled) {
+      this.modalControlEnabled = false;
+      let editModal = this.modalCtrl.create(EditPage, imageList);
+      editModal.present();
+    }
   }
 
   onPressRelease(event, image) {
-    this.alertControlEnabled = false;
+    this.modalControlEnabled = false;
   }
 
   onPress(event, image) {
-
+    this.modalControlEnabled = true;
   }
 }
 
